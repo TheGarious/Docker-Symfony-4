@@ -1,22 +1,15 @@
-docker-laravel
+docker-symfony-4
 ==============
 
 [![Build Status](https://secure.travis-ci.org/eko/docker-symfony.png?branch=master)](http://travis-ci.org/eko/docker-symfony)
 
-
-Just a little Docker POC in order to have a complete stack for running Laravel into Docker containers using docker-compose tool.
 
 # Installation
 
 First, clone this repository:
 
 ```bash
-git clone git@github.com:swabbl/docker-symfony.git
-git submodule update --init
-```
-
-Next, put your project application into `projects` folder and name for exemple `local.$(ProjectName).com`.
-After add `local.$(ProjectName).com` in your `/etc/hosts` file.
+git clone yourgit.git into project/local.project.com
 
 For stop the docker services:
 

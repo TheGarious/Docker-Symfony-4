@@ -1,0 +1,78 @@
+version: '2'
+services:
+    
+    app:
+        image: busybox
+        tty: true
+        volumes:
+            - $PROJECT_PATH:/home/dev/projects
+            - $CONTAINER_PATH:/home/dev/.docker_container
+    
+    db:
+        image: mysql
+        expose:
+            - 3306
+        ports:
+            - $MYSQL_PORT:3306
+        volumes:
+            - ./.volumes/mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: project
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+    
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - db
+        ports:
+            - $PHPMYADMIN_PORT:80
+        environment:
+            PMA_HOST: db
+            PMA_USER: root
+            PMA_PASSWORD: root
+        
+    nginx:
+        build: ./containers/nginx
+        ports:
+            - $HTTP_PORT:80
+            - $HTTPS_PORT:443
+        links:
+            - php
+        volumes_from:
+            - php
+            - app
+        volumes:
+            - ./logs/nginx/:/var/log/nginx
+    
+    mailhog:
+        image: mailhog/mailhog
+        expose:
+            - 1025
+        ports:
+            - $MAILHOG_PORT:8025
+    
+    php:
+        build: ./containers/php7
+        expose:
+            - 8443
+            - 9000
+            - 8888
+        ports:
+            - 8443:8443
+            - 8888:8888
+        volumes_from:
+            - app
+        links:
+            - db
+            - mailhog
+        privileged: true
+        extra_hosts:
+            - "local.project.com:127.0.0.1"
+        cap_add:
+            - SYS_ADMIN
+        shm_size: 1G
+        environment:
+            APP_ENV: dev
+            APP_SERVER: production

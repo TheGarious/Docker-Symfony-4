@@ -1,6 +1,6 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 
-MAINTAINER Maxime GASTALDO <maxtor3569@gmail.com>
+MAINTAINER Gary HOUBRE <gary.houbre@gmail.com>
 
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
